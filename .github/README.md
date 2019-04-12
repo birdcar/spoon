@@ -31,6 +31,7 @@ TODO: Fill out this long description.
 ## Maintainers
 
 [@nickcannariato](https://github.com/nickcannariato)
+[@BrandonGardner](https://github.com/brandongardner2)
 
 ## Contribute
 
