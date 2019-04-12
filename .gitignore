@@ -59,3 +59,7 @@ typings/
 
 # next.js build output
 .next
+
+# user specific back ups
+backups.json
+filteredRepos.json
