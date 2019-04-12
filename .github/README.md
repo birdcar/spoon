@@ -3,7 +3,7 @@
 [![standard-readme compliant](https://img.shields.io/badge/standard--readme-OK-green.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 TODO: Put more badges here.
 
-> The GitHub anit-fork
+> The GitHub anti-fork
 
 TODO: Fill out this long description.
 
