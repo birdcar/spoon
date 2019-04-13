@@ -17,7 +17,6 @@ axios.interceptors.request.use(config => {
   return config;
 });
 
-//TODO We need to figure out admin rights. Error message: "must have admin rights to repository"
 function main(repos) {
   bluebird
     .each(repos, repo => {
