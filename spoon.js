@@ -10,6 +10,7 @@ Thanks,
 require("dotenv").config();
 const fs = require("fs");
 const axios = require("axios");
+const bluebird = require("bluebird");
 
 const user = process.env.GHUSER; //YOUR GHUSERNAME.
 const token = process.env.GHKEY; //YOUR API KEY HERE.
@@ -22,20 +23,24 @@ axios.interceptors.request.use(config => {
 
 const main = async () => {
   console.log("Fetching forked repos...");
+  console.log(
+    `You have ${
+      forkedRepos.length
+    } forked repositories. Please search -bak after the operation and confirm the number of repos with -bak in the name.`
+  );
   const forkedRepos = await fetchRepos();
   console.log("Fetch complete.");
   console.log("Creating backup...");
-  const backup = await genBackup([forkedRepos[0]]);
+  await genBackup(forkedRepos);
   console.log("Backup complete.");
   console.log("Renaming existing forks...");
-  const res = await renameForks([forkedRepos[0]]);
+  await renameForks(forkedRepos);
   console.log("Renaming complete.");
   console.log("Generating new repos...");
-  const newRepos = await genRepos([forkedRepos[0]]);
+  await genRepos(forkedRepos);
   console.log("New repos complete.");
   console.log("Importing data from forks to new repos...");
-  const imported = await importData([forkedRepos[0]]);
-  console.log(imported);
+  await importData(forkedRepos);
   console.log("Import complete!");
 };
 
@@ -112,6 +117,9 @@ async function genRepos(repos) {
               name: repo.name,
               description: repo.description
             });
+            await new Promise(resolve => {
+              setTimeout(resolve, 500);
+            });
           } catch (error) {
             console.log("REPO CREATION ERROR", error);
             reject();
@@ -132,23 +140,24 @@ async function importData(repos) {
   return new Promise(async (resolve, reject) => {
     try {
       setTimeout(() => {
-        repos.forEach(async repo => {
-          try {
-            const res = await axios.put(
+        bluebird
+          .each(repos, repo => {
+            return axios.put(
               `https://api.github.com/repos/${repo.owner}/${repo.name}/import`,
               {
                 vcs_url: `https://github.com/${repo.full_name}-bak.git`,
                 vcs: "git"
               }
             );
-            console.log(res);
-          } catch (error) {
+          })
+          .then(() => {
+            resolve();
+          })
+          .catch(error => {
             console.log("IMPORT ERROR", error);
             reject();
-          }
-        }, 5000);
-      });
-      resolve();
+          });
+      }, 5000);
     } catch (error) {
       console.log("IMPORT ERROR", error);
       reject();
@@ -157,3 +166,19 @@ async function importData(repos) {
 }
 
 //6. You should now have all new repos with the original names AND all of your -bak repos that are still forked. Please proceed to drawer.js ONLY if this is true.
+
+// repos.forEach(async repo => {
+//     try {
+//       const res = await axios.put(
+//         `https://api.github.com/repos/${repo.owner}/${repo.name}/import`,
+//         {
+//           vcs_url: `https://github.com/${repo.full_name}-bak.git`,
+//           vcs: "git"
+//         }
+//       );
+//       console.log(res);
+//     } catch (error) {
+//       console.log("IMPORT ERROR", error);
+//       reject();
+//     }
+//   });
