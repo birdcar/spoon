@@ -12,7 +12,6 @@ const fs = require("fs");
 const axios = require("axios");
 const bluebird = require("bluebird");
 
-const user = process.env.GHUSER; //YOUR GHUSERNAME.
 const token = process.env.GHKEY; //YOUR API KEY HERE.
 
 axios.interceptors.request.use(config => {
