@@ -46,7 +46,7 @@ const main = async () => {
 main();
 
 //1. We grab a list of ALL of your current forked repos. If there are any that you do NOT want to defork, you will need to filter them manually after our initial filtering.
-async function fetchRepos() {
+function fetchRepos() {
   return new Promise(async (resolve, reject) => {
     try {
       //TODO Deal with > 100 repos.
@@ -86,29 +86,28 @@ function genBackup(arr) {
 }
 
 //3. We rename the current forked repos on GitHub.
-async function renameForks(repos) {
+function renameForks(repos) {
   return new Promise(async (resolve, reject) => {
-    try {
-      repos.forEach(async repo => {
-        try {
-          await axios.patch(`https://api.github.com/repos/${repo.full_name}`, {
-            name: repo.name + "-bak"
-          });
-        } catch (error) {
-          console.error("RENAME FORK ERROR", error);
-        }
+    bluebird
+      .each(repos, repo => {
+        return axios.patch(`https://api.github.com/repos/${repo.full_name}`, {
+          name: repo.name + "-bak"
+        });
+      })
+      .then(() => {
+        resolve();
+      })
+      .catch(error => {
+        console.log("FORK RENAMING ERROR", error);
+        reject(error);
       });
-      resolve("Fork renaming complete");
-    } catch (error) {
-      reject(error);
-    }
   });
 }
 
 //4. We generate all new repos using the array of forked repo names.
 //TODO Trial run with bluebird, maybe add a timeout after each iteration for safety?
-async function genRepos(repos) {
-  return new Promise(async (resolve, reject) => {
+function genRepos(repos) {
+  return new Promise((resolve, reject) => {
     try {
       setTimeout(() => {
         bluebird
@@ -131,8 +130,8 @@ async function genRepos(repos) {
 
 //5. We make a request to the GitHub import endpoint for each repo using the information from our -bak ammended array. This could take a while.
 //TODO Figure out how to handle import error "Import already in progress"
-async function importData(repos) {
-  return new Promise(async (resolve, reject) => {
+function importData(repos) {
+  return new Promise((resolve, reject) => {
     try {
       setTimeout(() => {
         bluebird
@@ -194,3 +193,15 @@ async function importData(repos) {
 //       reject();
 //     }
 //   });
+
+// Rename forks old code. Bluebird function NOT tested yet
+// repos.forEach(async repo => {
+//   try {
+//     await axios.patch(`https://api.github.com/repos/${repo.full_name}`, {
+//       name: repo.name + "-bak"
+//     });
+//   } catch (error) {
+//     console.error("RENAME FORK ERROR", error);
+//   }
+// });
+// resolve("Fork renaming complete");
