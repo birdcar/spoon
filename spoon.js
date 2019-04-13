@@ -107,26 +107,22 @@ async function renameForks(repos) {
 }
 
 //4. We generate all new repos using the array of forked repo names.
+//TODO Trial run with bluebird, maybe add a timeout after each iteration for safety?
 async function genRepos(repos) {
   return new Promise(async (resolve, reject) => {
     try {
       setTimeout(() => {
-        repos.forEach(async repo => {
-          try {
-            await axios.post(`https://api.github.com/user/repos`, {
+        bluebird
+          .each(repos, repo => {
+            return axios.post(`https://api.github.com/user/repos`, {
               name: repo.name,
               description: repo.description
             });
-            await new Promise(resolve => {
-              setTimeout(resolve, 500);
-            });
-          } catch (error) {
-            console.log("REPO CREATION ERROR", error);
-            reject();
-          }
-        });
+          })
+          .then(() => {
+            resolve();
+          });
       }, 500);
-      resolve();
     } catch (error) {
       console.log("REPO CREATION ERROR", error);
       reject();
@@ -167,6 +163,7 @@ async function importData(repos) {
 
 //6. You should now have all new repos with the original names AND all of your -bak repos that are still forked. Please proceed to drawer.js ONLY if this is true.
 
+//Old import repo code. Bluebird IS tested and GOOD.
 // repos.forEach(async repo => {
 //     try {
 //       const res = await axios.put(
@@ -179,6 +176,22 @@ async function importData(repos) {
 //       console.log(res);
 //     } catch (error) {
 //       console.log("IMPORT ERROR", error);
+//       reject();
+//     }
+//   });
+
+// Old generate new repo code. Bluebird function NOT tested yet
+// repos.forEach(async repo => {
+//     try {
+//       await axios.post(`https://api.github.com/user/repos`, {
+//         name: repo.name,
+//         description: repo.description
+//       });
+//       await new Promise(resolve => {
+//         setTimeout(resolve, 500);
+//       });
+//     } catch (error) {
+//       console.log("REPO CREATION ERROR", error);
 //       reject();
 //     }
 //   });
