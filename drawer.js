@@ -18,6 +18,7 @@ axios.interceptors.request.use(config => {
 });
 
 function main(repos) {
+  console.log("Starting to delete -bak repos...");
   bluebird
     .each(repos, repo => {
       return axios.delete(`https://api.github.com/repos/${repo.full_name}`);
