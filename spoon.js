@@ -16,17 +16,27 @@ const token = process.env.GHKEY; //YOUR API KEY HERE.
 
 axios.interceptors.request.use(config => {
   config.headers.authorization = `bearer ${token}`;
+  config.headers.accept = "application/vnd.github.barred-rock-preview";
   return config;
 });
 
 const main = async () => {
+  console.log("Fetching forked repos...");
   const forkedRepos = await fetchRepos();
+  console.log("Fetch complete.");
+  console.log("Creating backup...");
   const backup = await genBackup([forkedRepos[0]]);
-  console.log("BACKUP", backup);
+  console.log("Backup complete.");
+  console.log("Renaming existing forks...");
   const res = await renameForks([forkedRepos[0]]);
-  console.log(res);
+  console.log("Renaming complete.");
+  console.log("Generating new repos...");
   const newRepos = await genRepos([forkedRepos[0]]);
-  console.log(newRepos);
+  console.log("New repos complete.");
+  console.log("Importing data from forks to new repos...");
+  const imported = await importData([forkedRepos[0]]);
+  console.log(imported);
+  console.log("Import complete!");
 };
 
 main();
@@ -92,27 +102,58 @@ async function renameForks(repos) {
 }
 
 //4. We generate all new repos using the array of forked repo names.
-//https://developer.github.com/v3/repos/#create
 async function genRepos(repos) {
   return new Promise(async (resolve, reject) => {
     try {
-      repos.forEach(async repo => {
-        try {
-          await axios.post(`https://api.github.com/user/repos`, {
-            name: repo.name,
-            description: repo.description
-          });
-        } catch (error) {
-          console.log("REPO CREATION ERROR", error);
-        }
-      });
-      resolve("New repo creation complete");
+      setTimeout(() => {
+        repos.forEach(async repo => {
+          try {
+            await axios.post(`https://api.github.com/user/repos`, {
+              name: repo.name,
+              description: repo.description
+            });
+          } catch (error) {
+            console.log("REPO CREATION ERROR", error);
+            reject();
+          }
+        });
+      }, 500);
+      resolve();
     } catch (error) {
       console.log("REPO CREATION ERROR", error);
+      reject();
     }
   });
 }
 
-//5. We make a request to the GitHub import endpoint for each repo using the information from our -bak ammended array.
+//5. We make a request to the GitHub import endpoint for each repo using the information from our -bak ammended array. This could take a while.
+//TODO Figure out how to handle import error "Import already in progress"
+async function importData(repos) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      setTimeout(() => {
+        repos.forEach(async repo => {
+          try {
+            const res = await axios.put(
+              `https://api.github.com/repos/${repo.owner}/${repo.name}/import`,
+              {
+                vcs_url: `https://github.com/${repo.full_name}-bak.git`,
+                vcs: "git"
+              }
+            );
+            console.log(res);
+          } catch (error) {
+            console.log("IMPORT ERROR", error);
+            reject();
+          }
+        }, 5000);
+      });
+      resolve();
+    } catch (error) {
+      console.log("IMPORT ERROR", error);
+      reject();
+    }
+  });
+}
 
 //6. You should now have all new repos with the original names AND all of your -bak repos that are still forked. Please proceed to drawer.js ONLY if this is true.
