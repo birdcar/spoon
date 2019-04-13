@@ -1,5 +1,8 @@
 /*
-This script has been designed to use your provided GitHub API key and procedurally replace your forks with repos that you own. This provides you with all of your commit contributions that you may have missed out on. The creators of this are not responsible for any errors that you may make by altering the script. Please DO NOT use the drawer script until you are positive that your back-up forks and new repositories are made.
+This script has been designed to use your provided GitHub API key and procedurally replace your forks with repos that you own.
+This provides you with all of your commit contributions that you may have missed out on.
+The creators of this are not responsible for any errors that you may make by altering the script.
+Please DO NOT use the drawer script until you are positive that your back-up forks and new repositories are made.
 
 Thanks,
 -Nick & Brandon
