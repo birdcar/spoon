@@ -12,7 +12,8 @@ const fs = require("fs");
 const axios = require("axios");
 const bluebird = require("bluebird");
 
-const token = process.env.GHKEY; //YOUR API KEY HERE.
+const token = process.env.GHKEY; // YOUR API KEY HERE.
+const user = "fake-user"; // YOUR GITHUB HANDLE HERE
 
 axios.interceptors.request.use(config => {
   config.headers.authorization = `bearer ${token}`;
@@ -22,12 +23,12 @@ axios.interceptors.request.use(config => {
 
 const main = async () => {
   console.log("Fetching forked repos...");
+  const forkedRepos = await fetchRepos();
   console.log(
     `You have ${
       forkedRepos.length
     } forked repositories. Please search -bak after the operation and confirm the number of repos with -bak in the name.`
   );
-  const forkedRepos = await fetchRepos();
   console.log("Fetch complete.");
   console.log("Creating backup...");
   await genBackup(forkedRepos);
