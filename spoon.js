@@ -24,24 +24,29 @@ axios.interceptors.request.use(config => {
 const main = async () => {
   console.log("Fetching forked repos...");
   const forkedRepos = await fetchRepos();
+  console.log("Fetch complete.");
   console.log(
     `You have ${
-      forkedRepos.length
+    forkedRepos.length
     } forked repositories. Please search -bak after the operation and confirm the number of repos with -bak in the name.`
   );
-  console.log("Fetch complete.");
-  console.log("Creating backup...");
-  await genBackup(forkedRepos);
-  console.log("Backup complete.");
-  console.log("Renaming existing forks...");
-  await renameForks(forkedRepos);
-  console.log("Renaming complete.");
-  console.log("Generating new repos...");
-  await genRepos(forkedRepos);
-  console.log("New repos complete.");
-  console.log("Importing data from forks to new repos...");
-  await importData(forkedRepos);
-  console.log("Import complete!");
+  if (forkedRepos.length === 0) {
+    console.log('You currently have no forked repos, here\'s a pony!')
+    return null
+  } else {
+    console.log("Creating backup...");
+    await genBackup(forkedRepos);
+    console.log("Backup complete.");
+    console.log("Renaming existing forks...");
+    await renameForks(forkedRepos);
+    console.log("Renaming complete.");
+    console.log("Generating new repos...");
+    await genRepos(forkedRepos);
+    console.log("New repos complete.");
+    console.log("Importing data from forks to new repos...");
+    await importData(forkedRepos);
+    console.log("Import complete!");
+  }
 };
 
 main();
