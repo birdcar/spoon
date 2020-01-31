@@ -6,6 +6,9 @@ Please DO NOT use the drawer script until you are positive that your back-up for
 
 Thanks,
 -Nick & Brandon
+
+P.S. - It would also be a REALLY good idea to make sure that any unmerged PRs in your forked repos are merged _BEFORE_ running
+this script!
 */
 require("dotenv").config();
 const fs = require("fs");
