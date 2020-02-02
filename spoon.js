@@ -62,18 +62,18 @@ const main = async () => {
 		console.log("\nYou currently have no forked repos, here's a pony!");
 		return null;
 	} else {
-		console.log('\nCreating backups...');
+		console.log("\nCreating backups...");
 		await genBackup(forkedRepos);
-		console.log('Backups complete.');
-		console.log('Renaming existing forks...');
+		console.log("Backups complete.");
+		console.log("Renaming existing forks...");
 		await renameForks(forkedRepos);
-		console.log('Renaming complete.');
-		console.log('Generating new repos...');
+		console.log("Renaming complete.");
+		console.log("Generating new repos...");
 		await genRepos(forkedRepos);
-		console.log('New repos complete.');
-		console.log('Importing data from forks to new repos...');
+		console.log("New repos complete.");
+		console.log("Importing data from forks to new repos...");
 		await importData(forkedRepos);
-    console.log('Import complete.');
+    console.log("Import complete.");
     console.log(`\nTo confirm that this script correctly duplicated all of your forked repos properly, please search your repositories list for all repos with '-bak' added to the ends of their names.`)
 	}
 };
@@ -89,7 +89,11 @@ function fetchRepos() {
         `https://api.github.com/users/${user}/repos?per_page=100`
       );
       const filteredRepos = repos.reduce((arr, repo) => {
-        if (repo.fork) {
+        if (
+					repo.fork === true &&
+					repo.name !== "spoon" &&
+					repo.open_issues_count === 0
+				) {
           arr.push({
             owner: repo.owner.login,
             name: repo.name,
