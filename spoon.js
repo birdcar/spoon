@@ -52,18 +52,16 @@ axios.interceptors.request.use(config => {
 });
 
 const main = async () => {
-  console.log("Fetching forked repos...");
-  const forkedRepos = await fetchRepos();
-  console.log("Fetch complete.");
-  console.log(
-    `You have ${
-    forkedRepos.length
-    } forked repositories. Please search -bak after the operation and confirm the number of repos with -bak in the name.`
-  );
-  if (forkedRepos.length === 0) {
-    console.log('You currently have no forked repos, here\'s a pony!')
-    return null
-  } else {
+  console.log("\nFetching forked repos...");
+	const forkedRepos = await fetchRepos();
+	console.log("\nFetch complete.");
+	console.log(
+		`\nNumber of Forked Repos to 'Unfork': ${forkedRepos.length}\n\nIf you feel that this number is incorrect, please check the following before running the script again:\n---(a) take care of any unmerged PRs in your forked repos!\n---(b) verify that the GitHub API key you are using is correct.`
+	);
+	if (forkedRepos.length === 0) {
+		console.log("\nYou currently have no forked repos, here's a pony!");
+		return null;
+	} else {
     console.log("Creating backup...");
     await genBackup(forkedRepos);
     console.log("Backup complete.");
