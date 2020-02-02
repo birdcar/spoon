@@ -62,19 +62,20 @@ const main = async () => {
 		console.log("\nYou currently have no forked repos, here's a pony!");
 		return null;
 	} else {
-    console.log("Creating backup...");
-    await genBackup(forkedRepos);
-    console.log("Backup complete.");
-    console.log("Renaming existing forks...");
-    await renameForks(forkedRepos);
-    console.log("Renaming complete.");
-    console.log("Generating new repos...");
-    await genRepos(forkedRepos);
-    console.log("New repos complete.");
-    console.log("Importing data from forks to new repos...");
-    await importData(forkedRepos);
-    console.log("Import complete!");
-  }
+		console.log('\nCreating backups...');
+		await genBackup(forkedRepos);
+		console.log('Backups complete.');
+		console.log('Renaming existing forks...');
+		await renameForks(forkedRepos);
+		console.log('Renaming complete.');
+		console.log('Generating new repos...');
+		await genRepos(forkedRepos);
+		console.log('New repos complete.');
+		console.log('Importing data from forks to new repos...');
+		await importData(forkedRepos);
+    console.log('Import complete.');
+    console.log(`\nTo confirm that this script correctly duplicated all of your forked repos properly, please search your repositories list for all repos with '-bak' added to the ends of their names.`)
+	}
 };
 
 main();
