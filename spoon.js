@@ -1,14 +1,41 @@
 /*
-This script has been designed to use your provided GitHub API key and procedurally replace your forks with repos that you own.
-This provides you with all of your commit contributions that you may have missed out on.
-The creators of this are not responsible for any errors that you may make by altering the script.
-Please DO NOT use the drawer script until you are positive that your back-up forks and new repositories are made.
+***NOTE: This script has only been tested on cases where the total number of
+forked repos is < 100 forks. If you are attempting to run this script on more
+than 100 forks, please be aware that we, the creators, are not responsible for
+any errors that result from altering this script.
+
+(i)   This script has been designed to use your provided GitHub API key & your
+GitHub handle to procedurally replace each of your forked repositories with
+fresh copies of those repos that you will personally own.
+
+(ii)  Running this script will update your GitHub contribution calendar,
+retroactively giving you credit for any and all commits that were previously
+made to these forked repos. If all of the following are true regarding those 
+old commits, you will finally receive the credit you deserve for them:
+
+    (a) The email address used for the commits is associated with your GitHub
+        account (i.e. - verify that the email address you have set up for git 
+        on your local machine is the same as the email address you have set up 
+        on your GitHub account).
+        
+    (b) The previous commits you made were on the default branch (usually 
+        'master' branch) of the forked repo. If they are on a different branch,
+        please open up a new pull request and make sure to merge them into 
+        'master' before running this script! ***YOU HAVE BEEN WARNED!
+
+(iii) The creators of this script are NOT responsible for any errors that you 
+      may produce by altering the script.
+
+(iv)  Please do NOT proceed with running the 'drawer.js' script until you are 
+      100% POSITIVE that your back-up forks and new repositories have been 
+      created successfully.
 
 Thanks,
 -Nick & Brandon
 
-P.S. - It would also be a REALLY good idea to make sure that any unmerged PRs in your forked repos are merged _BEFORE_ running
-this script!
+P.S. -  Not to sound like a 'broken record', but it would be a REALLY good idea 
+        to make sure that any unmerged PRs in your forked repos are merged 
+        _BEFORE_ running this script!
 */
 require("dotenv").config();
 const fs = require("fs");
