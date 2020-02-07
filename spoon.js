@@ -43,7 +43,7 @@ const axios = require("axios");
 const bluebird = require("bluebird");
 
 const token = process.env.GHKEY; // YOUR API KEY HERE.
-const user = "ticotheps"; // YOUR GITHUB HANDLE HERE
+const user = "fake-user"; // YOUR GITHUB HANDLE HERE
 
 axios.interceptors.request.use(config => {
 	config.headers.authorization = `bearer ${token}`;
