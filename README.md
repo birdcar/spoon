@@ -1,5 +1,4 @@
-spoon
-=====
+# spoon
 
 The GitHub anti-fork
 
@@ -9,11 +8,15 @@ The GitHub anti-fork
 [![License](https://img.shields.io/npm/l/spoon.svg)](https://github.com/nickcannariato/spoon/blob/master/package.json)
 
 <!-- toc -->
-* [Usage](#usage)
-* [Commands](#commands)
+
+- [Usage](#usage)
+- [Commands](#commands)
 <!-- tocstop -->
+
 # Usage
+
 <!-- usage -->
+
 ```sh-session
 $ npm install -g spoon
 $ spoon COMMAND
@@ -25,31 +28,18 @@ USAGE
   $ spoon COMMAND
 ...
 ```
+
 <!-- usagestop -->
+
 # Commands
+
 <!-- commands -->
-* [`spoon hello [FILE]`](#spoon-hello-file)
-* [`spoon help [COMMAND]`](#spoon-help-command)
 
-## `spoon hello [FILE]`
-
-describe the command here
-
-```
-USAGE
-  $ spoon hello [FILE]
-
-OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
-
-EXAMPLE
-  $ spoon hello
-  hello world from ./src/hello.ts!
-```
-
-_See code: [src/commands/hello.ts](https://github.com/nickcannariato/spoon/blob/v0.0.1/src/commands/hello.ts)_
+- [spoon](#spoon)
+- [Usage](#usage)
+- [Commands](#commands)
+  - [`spoon help [COMMAND]`](#spoon-help-command)
+  - [`spoon login [FILE]`](#spoon-login-file)
 
 ## `spoon help [COMMAND]`
 
@@ -67,4 +57,20 @@ OPTIONS
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.2.3/src/commands/help.ts)_
+
+## `spoon login [FILE]`
+
+describe the command here
+
+```
+USAGE
+  $ spoon login
+
+OPTIONS
+  -h, --help         show CLI help
+  -t, --token=token  A GitHub Personal Access Token with at 'repo' & 'delete_repo' scopes
+```
+
+_See code: [src/commands/login.ts](https://github.com/nickcannariato/spoon/blob/v0.0.1/src/commands/login.ts)_
+
 <!-- commandsstop -->
