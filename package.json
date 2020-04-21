@@ -12,6 +12,7 @@
     "@oclif/config": "^1.15.1",
     "@oclif/plugin-help": "^2.2.3",
     "chalk": "^4.0.0",
+    "cli-ux": "^5.4.5",
     "tslib": "^1.11.1"
   },
   "devDependencies": {
