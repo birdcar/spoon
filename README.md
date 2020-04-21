@@ -58,13 +58,13 @@ OPTIONS
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.2.3/src/commands/help.ts)_
 
-## `spoon login [FILE]`
+## `spoon login [-t $GITHUB_TOKEN]`
 
-describe the command here
+Authenticates Spoon with GitHub account using a Personal Access Token
 
 ```
 USAGE
-  $ spoon login
+  $ spoon login [-t $GITHUB_TOKEN]
 
 OPTIONS
   -h, --help         show CLI help
@@ -72,5 +72,4 @@ OPTIONS
 ```
 
 _See code: [src/commands/login.ts](https://github.com/nickcannariato/spoon/blob/v0.0.1/src/commands/login.ts)_
-
 <!-- commandsstop -->
