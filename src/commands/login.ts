@@ -1,15 +1,11 @@
-// Std library imports
 const fs = require("fs");
 const path = require("path");
-
-// Oclif imports
-import { Command, flags } from "@oclif/command";
-import { access } from "fs";
-
-// Third-party imports
 const { cli } = require("cli-ux");
 const chalk = require("chalk");
 const { Octokit } = require("@octokit/rest");
+
+// Oclif imports
+import { Command, flags } from "@oclif/command";
 
 export default class Login extends Command {
   static description = `Authenticates Spoon with GitHub account using a Personal Access Token`;
@@ -17,7 +13,6 @@ export default class Login extends Command {
 
   static flags = {
     help: flags.help({ char: "h" }),
-    // flag with a value (-n, --name=VALUE)
     token: flags.string({
       char: "t",
       description: `A GitHub Personal Access Token with at 'repo' & 'delete_repo' scopes`,
@@ -41,7 +36,6 @@ export default class Login extends Command {
       let { data } = await octokit.request("/user");
       user = data;
     }
-
     if (!flags.token || !user) {
       this.log(
         "Press any key and a web browser will open GitHub's 'New Token' page."
@@ -62,6 +56,7 @@ export default class Login extends Command {
         let accessToken = await cli.prompt("Paste token here");
 
         try {
+          cli.action.start("Attempting to authenticate with GitHub");
           octokit = new Octokit({
             auth: accessToken,
           });
@@ -72,10 +67,13 @@ export default class Login extends Command {
           this.log("Invalid token, login unsuccessful");
           this.log("Please try again\n\n");
         }
+        cli.action.stop(
+          chalk.green(`${user.login} successfully authenticated`)
+        );
       }
     }
-
+    cli.action.start(`Writing token to: ${configFile}`);
     fs.writeFileSync(configFile, JSON.stringify({ accessToken }));
-    this.log(`${user.login} successfully authenticated`);
+    cli.action.stop(chalk.green("done"));
   }
 }
