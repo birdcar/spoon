@@ -1,7 +1,72 @@
 {
+  "name": "spoon",
+  "description": "The GitHub anti-fork",
+  "version": "0.0.1",
+  "author": "Nick Cannariato",
+  "bin": {
+    "spoon": "./bin/run"
+  },
+  "bugs": "https://github.com/nickcannariato/spoon/issues",
   "dependencies": {
-    "axios": "^0.18.0",
-    "bluebird": "^3.5.4",
-    "dotenv": "^7.0.0"
-  }
+    "@oclif/command": "^1.5.20",
+    "@oclif/config": "^1.15.1",
+    "@oclif/plugin-help": "^2.2.3",
+    "@octokit/rest": "^17.5.1",
+    "chalk": "^4.0.0",
+    "cli-ux": "^5.4.5",
+    "express": "^4.17.1",
+    "tslib": "^1.11.1"
+  },
+  "devDependencies": {
+    "@oclif/dev-cli": "^1.22.2",
+    "@oclif/test": "^1.2.5",
+    "@types/chai": "^4.2.11",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^10.17.20",
+    "chai": "^4.2.0",
+    "eslint": "^5.16.0",
+    "eslint-config-oclif": "^3.1.0",
+    "eslint-config-oclif-typescript": "^0.1.0",
+    "globby": "^10.0.2",
+    "mocha": "^5.2.0",
+    "nyc": "^14.1.1",
+    "oclif": "^1.15.2",
+    "ts-node": "^8.9.0",
+    "typescript": "^3.8.3"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "files": [
+    "/bin",
+    "/lib",
+    "/npm-shrinkwrap.json",
+    "/oclif.manifest.json"
+  ],
+  "homepage": "https://github.com/nickcannariato/spoon",
+  "keywords": [
+    "oclif"
+  ],
+  "license": "Hippocratic 2.1",
+  "main": "lib/index.js",
+  "oclif": {
+    "commands": "./lib/commands",
+    "bin": "spoon",
+    "plugins": [
+      "@oclif/plugin-help"
+    ],
+    "hooks": {
+      "authCheck": "./lib/hooks/authCheck"
+    }
+  },
+  "repository": "nickcannariato/spoon",
+  "scripts": {
+    "postpack": "rm -f oclif.manifest.json",
+    "posttest": "eslint . --ext .ts --config .eslintrc",
+    "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
+    "test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
+    "version": "oclif-dev readme && git add README.md",
+    "gen-command": "oclif command"
+  },
+  "types": "lib/index.d.ts"
 }
