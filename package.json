@@ -54,7 +54,10 @@
     "bin": "spoon",
     "plugins": [
       "@oclif/plugin-help"
-    ]
+    ],
+    "hooks": {
+      "authCheck": "./lib/hooks/authCheck"
+    }
   },
   "repository": "nickcannariato/spoon",
   "scripts": {
