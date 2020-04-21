@@ -4,6 +4,7 @@ const path = require("path");
 
 // Oclif imports
 import { Command, flags } from "@oclif/command";
+import { access } from "fs";
 
 // Third-party imports
 const { cli } = require("cli-ux");
@@ -11,8 +12,8 @@ const chalk = require("chalk");
 const { Octokit } = require("@octokit/rest");
 
 export default class Login extends Command {
-  static description = `Log in with your GitHub credentials`;
-  static usage = `login`;
+  static description = `Authenticates Spoon with GitHub account using a Personal Access Token`;
+  static usage = `login [-t $GITHUB_TOKEN]`;
 
   static flags = {
     help: flags.help({ char: "h" }),
@@ -32,9 +33,16 @@ export default class Login extends Command {
 
     let configFile = path.join(this.config.configDir, "config.json");
     let accessToken = flags.token || undefined;
-    let octokit = new Octokit({ auth: accessToken }) || undefined;
+    let octokit = undefined;
+    let user = undefined;
 
-    if (!flags.token) {
+    if (accessToken) {
+      octokit = new Octokit({ auth: accessToken });
+      let { data } = await octokit.request("/user");
+      user = data;
+    }
+
+    if (!flags.token || !user) {
       this.log(
         "Press any key and a web browser will open GitHub's 'New Token' page."
       );
@@ -57,6 +65,8 @@ export default class Login extends Command {
           octokit = new Octokit({
             auth: accessToken,
           });
+          let { data } = await octokit.request("/user");
+          user = data;
           loginSuccess = true;
         } catch (e) {
           this.log("Invalid token, login unsuccessful");
@@ -66,6 +76,6 @@ export default class Login extends Command {
     }
 
     fs.writeFileSync(configFile, JSON.stringify({ accessToken }));
-    this.log(`Logged into GitHub successfully`);
+    this.log(`${user.login} successfully authenticated`);
   }
 }
